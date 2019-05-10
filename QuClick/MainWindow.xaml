@@ -1,0 +1,39 @@
+﻿<Window x:Class="QuClick.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:QuClick"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="400">
+
+    <Border Padding="10">
+        <StackPanel>
+
+            <Button x:Name="StartStopButton" Click="StartStopButton_Click"  FontFamily="Lato" FontSize="20" Content="Start / Stop QuClick"></Button>
+            <Button x:Name="ToggleButton" Click="ToggleButton_Click"  FontFamily="Lato" FontSize="20" Margin="0 20" Content="Toggle QuClick keybinds"></Button>
+
+            <TextBlock Text="Start / Stop keybind" FontWeight="Bold" Margin="0 10"/>
+            <Button x:Name="StartStopKeybind" Click="StartStopKeybind_Click" FontFamily="Lato" FontSize="12" Content="Press to record key" Padding="5"></Button>
+
+            <TextBlock Text="Toggle QuClick keybind" FontWeight="Bold" Margin="0 10"/>
+            <Button x:Name="ToggleKeybind" Click="ToggleKeybind_Click" FontFamily="Lato" FontSize="12" Content="Press to record key" Padding="5"></Button>
+
+            <TextBlock Text="Fix cursor to spot" FontWeight="Bold" Margin="0 10"/>
+            <Button x:Name="FixKeybind" Click="FixKeybind_Click" FontFamily="Lato" FontSize="12" Content="Press to record place" Padding="5"></Button>
+
+            <Grid Margin="0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="Frequency" FontWeight="Bold" Margin="0 10"/>
+                <TextBox Grid.Column="1" Padding="2" Margin="0 7 0 7"/>
+                <TextBlock Grid.Column="2" Text="Clicks/s" Padding="5 10 0 0"/>
+            </Grid>
+        </StackPanel>
+    </Border>
+    
+</Window>
