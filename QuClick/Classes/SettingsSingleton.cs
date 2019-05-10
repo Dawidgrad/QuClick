@@ -15,9 +15,14 @@ namespace QuClick.Classes
         public int clicksPerSecond { get; set; }
         public double mouseX { get; set; }
         public double mouseY { get; set; }
+        public bool mouseFixed { get; set; }
 
 
-        private SettingsSingleton() { }
+        private SettingsSingleton()
+        {
+            clicksPerSecond = 20;
+            mouseFixed = false;
+        }
 
         public static SettingsSingleton GetInstance()
         {

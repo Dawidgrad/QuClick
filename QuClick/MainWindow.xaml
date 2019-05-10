@@ -5,13 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuClick"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="400">
+        Title="MainWindow" Height="300" Width="400">
 
     <Border Padding="10">
         <StackPanel>
-
-            <Button x:Name="StartStopButton" Click="StartStopButton_Click"  FontFamily="Lato" FontSize="20" Content="Start / Stop QuClick"></Button>
-            <Button x:Name="ToggleButton" Click="ToggleButton_Click"  FontFamily="Lato" FontSize="20" Margin="0 20" Content="Toggle QuClick keybinds"></Button>
 
             <TextBlock Text="Start / Stop keybind" FontWeight="Bold" Margin="0 10"/>
             <Button x:Name="StartStopKeybind" Click="StartStopKeybind_Click" FontFamily="Lato" FontSize="12" Content="Press to record key" Padding="5"></Button>
@@ -22,7 +19,7 @@
             <TextBlock Text="Fix cursor to spot" FontWeight="Bold" Margin="0 10"/>
             <Button x:Name="FixKeybind" Click="FixKeybind_Click" FontFamily="Lato" FontSize="12" Content="Press to record place" Padding="5"></Button>
 
-            <Grid Margin="0 10">
+            <Grid Margin="0 20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>

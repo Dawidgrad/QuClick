@@ -13,3 +13,18 @@ C:\Users\Davio\source\repos\QuClick\QuClick\obj\Debug\QuClick.csproj.GenerateRes
 C:\Users\Davio\source\repos\QuClick\QuClick\obj\Debug\QuClick.csproj.CoreCompileInputs.cache
 C:\Users\Davio\source\repos\QuClick\QuClick\obj\Debug\QuClick.exe
 C:\Users\Davio\source\repos\QuClick\QuClick\obj\Debug\QuClick.pdb
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\bin\Debug\QuClick.exe.config
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\bin\Debug\QuClick.exe
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\bin\Debug\QuClick.pdb
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\obj\Debug\QuClick.csprojAssemblyReference.cache
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\obj\Debug\MainWindow.g.cs
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\obj\Debug\App.g.cs
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\obj\Debug\QuClick_MarkupCompile.cache
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\obj\Debug\QuClick_MarkupCompile.lref
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\obj\Debug\MainWindow.baml
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\obj\Debug\QuClick.g.resources
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\obj\Debug\QuClick.Properties.Resources.resources
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\obj\Debug\QuClick.csproj.GenerateResource.cache
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\obj\Debug\QuClick.csproj.CoreCompileInputs.cache
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\obj\Debug\QuClick.exe
+G:\Programowanie\Moje Projekty\C#\QuClick\QuClick\obj\Debug\QuClick.pdb
