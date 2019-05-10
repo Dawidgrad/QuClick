@@ -51,7 +51,7 @@ namespace QuClick
                 this.canClick = false;
 
                 PreviewKeyDown += StartStop_PreviewKeyDown;
-                await Task.Delay(5000);
+                await Task.Delay(2000);
                 PreviewKeyDown -= StartStop_PreviewKeyDown;
 
                 this.canClick = true;
@@ -65,7 +65,7 @@ namespace QuClick
                 this.canClick = false;
 
                 PreviewKeyDown += Toggle_PreviewKeyDown;
-                await Task.Delay(5000);
+                await Task.Delay(2000);
                 PreviewKeyDown -= Toggle_PreviewKeyDown;
 
                 this.canClick = true;
@@ -75,10 +75,12 @@ namespace QuClick
         private void Toggle_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             settings.toggleKeybind = e.Key;
+            ToggleLabel.Text = e.Key.ToString();
         }
         private void StartStop_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             settings.startStopKeybind = e.Key;
+            StartStopLabel.Text = e.Key.ToString();
         }
 
         private void FixKeybind_Click(object sender, RoutedEventArgs e)
