@@ -30,6 +30,7 @@ namespace QuClick.Classes
             return lpPoint;
         }
 
+        // Simulate mouse click
         public void ClickMouse()
         {
             Point mousePoint = GetCursorPosition();

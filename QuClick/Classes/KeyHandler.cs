@@ -44,6 +44,7 @@ namespace QuClick.Classes
             }
         }
 
+
         public void UnregisterHotKey()
         {
             var helper = new WindowInteropHelper(window);

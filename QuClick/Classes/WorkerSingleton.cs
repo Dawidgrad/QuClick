@@ -10,9 +10,11 @@ namespace QuClick.Classes
     class WorkerSingleton
     {
         private static WorkerSingleton uniqueInstance = null;
+        public int Frequency { get; set; }
 
         private WorkerSingleton()
         {
+            Frequency = 1;
         }
 
         public static WorkerSingleton GetInstance()
@@ -31,7 +33,7 @@ namespace QuClick.Classes
             {
                 MouseClicker mouseClicker = new MouseClicker();
                 mouseClicker.ClickMouse();
-                Thread.Sleep(1000);
+                Thread.Sleep(1000 / Frequency);
             }
         }
     }
