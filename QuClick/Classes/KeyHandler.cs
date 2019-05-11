@@ -12,36 +12,42 @@ namespace QuClick.Classes
 {
     public class KeyHandler
     {
-        [DllImport("user32.dll")]
-        private static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vk);
+        [DllImport("User32.dll")]
+        private static extern bool RegisterHotKey(
+            [In] IntPtr hWnd,
+            [In] int id,
+            [In] uint fsModifiers,
+            [In] uint vk);
 
-        [DllImport("user32.dll")]
-        private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+        [DllImport("User32.dll")]
+        private static extern bool UnregisterHotKey(
+            [In] IntPtr hWnd,
+            [In] int id);
 
-        private int key;
-        private IntPtr hWnd;
-        private int id;
+        private uint key;
+        private int hotkeyId;
+        Window window;
 
-        public KeyHandler(int key)
+        public KeyHandler(uint key, int hotkeyId, Window window)
         {
-            this.key = (int)key;
-            this.hWnd = new WindowInteropHelper(Application.Current.MainWindow).Handle;
-            id = this.GetHashCode();
+            this.key = key;
+            this.hotkeyId = hotkeyId;
+            this.window = window;
+        }
+        
+        public void RegisterHotKey()
+        {
+            var helper = new WindowInteropHelper(window);
+            if (!RegisterHotKey(helper.Handle, hotkeyId, 0, key))
+            {
+                // handle error
+            }
         }
 
-        public override int GetHashCode()
+        public void UnregisterHotKey()
         {
-            return key ^ hWnd.ToInt32();
-        }
-
-        public bool Register()
-        {
-            return RegisterHotKey(hWnd, 9000, 0, key);
-        }
-
-        public bool Unregiser()
-        {
-            return UnregisterHotKey(hWnd, id);
+            var helper = new WindowInteropHelper(window);
+            UnregisterHotKey(helper.Handle, hotkeyId);
         }
 
 

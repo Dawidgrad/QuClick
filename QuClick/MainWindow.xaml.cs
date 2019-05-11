@@ -1,20 +1,11 @@
 ﻿using QuClick.Classes;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Interop;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace QuClick
 {
@@ -28,21 +19,9 @@ namespace QuClick
         private KeyHandler startStopHandler;
         private KeyHandler toggleHandler;
 
-
-        [DllImport("User32.dll")]
-        private static extern bool RegisterHotKey(
-            [In] IntPtr hWnd,
-            [In] int id,
-            [In] uint fsModifiers,
-            [In] uint vk);
-
-        [DllImport("User32.dll")]
-        private static extern bool UnregisterHotKey(
-            [In] IntPtr hWnd,
-            [In] int id);
-
         private HwndSource _source;
         private const int HOTKEY_ID = 9000;
+        private Thread workerThread = null;
 
         public MainWindow()
         {
@@ -86,8 +65,9 @@ namespace QuClick
             settings.toggleKeybind = e.Key;
             ToggleLabel.Text = e.Key.ToString();
 
-            //toggleHandler = new KeyHandler(settings.toggleKeybind);
-            //toggleHandler.Register();
+            uint keyId = (uint)KeyInterop.VirtualKeyFromKey(e.Key);
+            toggleHandler = new KeyHandler(keyId, HOTKEY_ID, this);
+            toggleHandler.RegisterHotKey();
         }
 
         // Save Start / Stop keybind when key press is detected
@@ -96,8 +76,9 @@ namespace QuClick
             settings.startStopKeybind = e.Key;
             StartStopLabel.Text = e.Key.ToString();
 
-            //startStopHandler = new KeyHandler(settings.startStopKeybind);
-            //bool result = startStopHandler.Register();
+            uint keyId = (uint)KeyInterop.VirtualKeyFromKey(e.Key);
+            startStopHandler = new KeyHandler(keyId, HOTKEY_ID, this);
+            startStopHandler.RegisterHotKey();
         }
 
         private void FixKeybind_Click(object sender, RoutedEventArgs e)
@@ -116,32 +97,22 @@ namespace QuClick
             var helper = new WindowInteropHelper(this);
             _source = HwndSource.FromHwnd(helper.Handle);
             _source.AddHook(HwndHook);
-            RegisterHotKey();
         }
 
         protected override void OnClosed(EventArgs e)
         {
             _source.RemoveHook(HwndHook);
             _source = null;
-            UnregisterHotKey();
+            
+            if (toggleHandler != null)
+                toggleHandler.UnregisterHotKey();
+
+            if (startStopHandler != null)
+                startStopHandler.UnregisterHotKey();
+            
             base.OnClosed(e);
         }
 
-        private void RegisterHotKey()
-        {
-            var helper = new WindowInteropHelper(this);
-            const uint VK_F10 = 0x79;
-            if (!RegisterHotKey(helper.Handle, HOTKEY_ID, 0, VK_F10))
-            {
-                // handle error
-            }
-        }
-
-        private void UnregisterHotKey()
-        {
-            var helper = new WindowInteropHelper(this);
-            UnregisterHotKey(helper.Handle, HOTKEY_ID);
-        }
 
         private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
@@ -152,7 +123,19 @@ namespace QuClick
                     switch (wParam.ToInt32())
                     {
                         case HOTKEY_ID:
-                            OnHotKeyPressed();
+                            WorkerSingleton worker = WorkerSingleton.GetInstance();
+
+                            if (workerThread == null)
+                            {
+                                workerThread = new Thread(new ThreadStart(worker.OnHotKeyPressed));
+                                workerThread.Start();
+                            }
+                            else
+                            {
+                                workerThread.Abort();
+                                workerThread = null;
+                            }
+
                             handled = true;
                             break;
                     }
@@ -161,11 +144,10 @@ namespace QuClick
             return IntPtr.Zero;
         }
 
-        private void OnHotKeyPressed()
-        {
-            MouseClicker mouseClicker = new MouseClicker();
-            mouseClicker.ClickMouse();
-        }
+        //private void OnHotKeyPressed()
+        //{
+        //    worker.OnHotKeyPressed();
+        //}
     }
 
 

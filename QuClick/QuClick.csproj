@@ -66,6 +66,7 @@
     <Compile Include="Classes\KeyHandler.cs" />
     <Compile Include="Classes\MouseClicker.cs" />
     <Compile Include="Classes\SettingsSingleton.cs" />
+    <Compile Include="Classes\WorkerSingleton.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
