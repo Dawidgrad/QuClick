@@ -14,15 +14,21 @@ namespace QuClick
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool canClick = true;
         private SettingsSingleton settings;
+
+        // Key handlers responsible for registering
+        // and unregistering keys
         private KeyHandler startStopHandler;
         private KeyHandler toggleHandler;
 
         private HwndSource _source;
         private const int HOTKEY_ID = 9000;
+        
+        // Thread to simulate mouse clicking in a loop
         private Thread workerThread = null;
         WorkerSingleton worker = WorkerSingleton.GetInstance();
+
+        private bool canClick = true;
 
         public MainWindow()
         {
@@ -65,25 +71,43 @@ namespace QuClick
         // Save Toggle keybind when key press is detected
         private void Toggle_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            settings.toggleKeybind = e.Key;
-            ToggleLabel.Text = e.Key.ToString();
+            try
+            {
+                settings.toggleKeybind = e.Key;
+                ToggleLabel.Text = e.Key.ToString();
 
-            // Register the key that was pressed by the user
-            uint keyId = (uint)KeyInterop.VirtualKeyFromKey(e.Key);
-            toggleHandler = new KeyHandler(keyId, HOTKEY_ID, this);
-            toggleHandler.RegisterHotKey();
+                // Register the key that was pressed by the user
+                uint keyId = (uint)KeyInterop.VirtualKeyFromKey(e.Key);
+                toggleHandler = new KeyHandler(keyId, HOTKEY_ID, this);
+                toggleHandler.RegisterHotKey();
+
+                MessageBox.Show("The toggle keybind was modified!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("The keybind could not be modified!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         // Save Start / Stop keybind when key press is detected
         private void StartStop_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            settings.startStopKeybind = e.Key;
-            StartStopLabel.Text = e.Key.ToString();
+            try
+            {
+                settings.startStopKeybind = e.Key;
+                StartStopLabel.Text = e.Key.ToString();
 
-            // Register the key that was pressed by the user
-            uint keyId = (uint)KeyInterop.VirtualKeyFromKey(e.Key);
-            startStopHandler = new KeyHandler(keyId, HOTKEY_ID, this);
-            startStopHandler.RegisterHotKey();
+                // Register the key that was pressed by the user
+                uint keyId = (uint)KeyInterop.VirtualKeyFromKey(e.Key);
+                startStopHandler = new KeyHandler(keyId, HOTKEY_ID, this);
+                startStopHandler.RegisterHotKey();
+
+                MessageBox.Show("The start / stop keybind was modified!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("The keybind could not be modified!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void FixKeybind_Click(object sender, RoutedEventArgs e)
@@ -96,10 +120,19 @@ namespace QuClick
             try
             {
                 this.worker.Frequency = Int32.Parse(Frequency.Text);
+                MessageBox.Show("The frequency was modified!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            catch (Exception ex)
+            catch (ArgumentNullException ex)
             {
-                // Error handling
+                MessageBox.Show("The value passed was empty!", "Value error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (FormatException ex)
+            {
+                MessageBox.Show("The value passed was in the wrong format!", "Value error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (OverflowException ex)
+            {
+                MessageBox.Show("Value too high!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

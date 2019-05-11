@@ -40,7 +40,7 @@ namespace QuClick.Classes
             var helper = new WindowInteropHelper(window);
             if (!RegisterHotKey(helper.Handle, hotkeyId, 0, key))
             {
-                // handle error
+                MessageBox.Show("Could not register key!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

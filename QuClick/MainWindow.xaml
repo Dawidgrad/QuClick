@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuClick"
         mc:Ignorable="d"
-        Title="MainWindow" Height="300" Width="400">
+        Title="QuClick" Height="300" Width="400">
 
     <Border Padding="10">
         <StackPanel>
@@ -27,7 +27,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 
-                <TextBlock Text="Toggle QuClick keybind" FontWeight="Bold" Margin="0 10"/>
+                <TextBlock Text="Turn keybinds on / off" FontWeight="Bold" Margin="0 10"/>
                 <TextBlock x:Name="ToggleLabel" Grid.Column="1" FontWeight="Bold" Margin="0 10" />
             </Grid>
             <Button x:Name="ToggleKeybind" Click="ToggleKeybind_Click" FontFamily="Lato" FontSize="12" Content="Press to record key" Padding="5" Margin="10 0 10 0"></Button>
