@@ -73,6 +73,11 @@ namespace QuClick
         {
             try
             {
+                if (settings.toggleKeybind != null)
+                {
+                    toggleHandler.UnregisterHotKey();
+                }
+
                 settings.toggleKeybind = e.Key;
                 ToggleLabel.Text = e.Key.ToString();
 
@@ -94,6 +99,11 @@ namespace QuClick
         {
             try
             {
+                if (settings.startStopKeybind != null)
+                {
+                    startStopHandler.UnregisterHotKey();
+                }
+                
                 settings.startStopKeybind = e.Key;
                 StartStopLabel.Text = e.Key.ToString();
 

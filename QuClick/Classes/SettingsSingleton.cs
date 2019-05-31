@@ -10,8 +10,8 @@ namespace QuClick.Classes
     class SettingsSingleton
     {
         private static SettingsSingleton uniqueInstance = null;
-        public Key startStopKeybind { get; set; }
-        public Key toggleKeybind { get; set; }
+        public Key? startStopKeybind { get; set; }
+        public Key? toggleKeybind { get; set; }
         public int clicksPerSecond { get; set; }
         public double mouseX { get; set; }
         public double mouseY { get; set; }
