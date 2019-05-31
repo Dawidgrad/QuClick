@@ -3,9 +3,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
-
 
 namespace QuClick
 {
@@ -20,6 +20,7 @@ namespace QuClick
         // and unregistering keys
         private KeyHandler startStopHandler;
         private KeyHandler toggleHandler;
+        private KeyHandler fixMouseHandler;
 
         private HwndSource _source;
         private const int HOTKEY_ID = 9000;
@@ -35,6 +36,9 @@ namespace QuClick
             InitializeComponent();
             settings = SettingsSingleton.GetInstance();
         }
+
+        /**************************************************************************/
+        #region Click events
 
         // Detect when the Start / Stop button was clicked
         private async void StartStopKeybind_Click(object sender, RoutedEventArgs e)
@@ -67,6 +71,49 @@ namespace QuClick
                 this.canClick = true;
             }
         }
+
+        // Record the keybind to activate fixed cursor position
+        private async void FixKeybind_Click(object sender, RoutedEventArgs e)
+        {
+            if (canClick)
+            {
+                this.canClick = false;
+
+                // Give user 2 seconds to enter the keybind
+                PreviewKeyDown += FixKeybind_PreviewKeyDown;
+                await Task.Delay(2000);
+                PreviewKeyDown -= FixKeybind_PreviewKeyDown;
+
+                this.canClick = true;
+            }
+        }
+
+        // Detect when the frequency button is clicked 
+        private void FrequencyButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                this.worker.Frequency = Int32.Parse(Frequency.Text);
+                MessageBox.Show("The frequency was modified!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (ArgumentNullException ex)
+            {
+                MessageBox.Show("The value passed was empty!", "Value error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (FormatException ex)
+            {
+                MessageBox.Show("The value passed was in the wrong format!", "Value error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (OverflowException ex)
+            {
+                MessageBox.Show("Value too high!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        #endregion
+
+        /**************************************************************************/
+        #region PreviewKeyDown events
 
         // Save Toggle keybind when key press is detected
         private void Toggle_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -119,34 +166,36 @@ namespace QuClick
                 MessageBox.Show("The keybind could not be modified!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-        // Start recording the position of the cursor to save
-        private void FixKeybind_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        // Detect when the frequency button is clicked 
-        private void FrequencyButton_Click(object sender, RoutedEventArgs e)
+        
+        private void FixKeybind_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                this.worker.Frequency = Int32.Parse(Frequency.Text);
-                MessageBox.Show("The frequency was modified!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (settings.fixKeybind != null)
+                {
+                    fixMouseHandler.UnregisterHotKey();
+                }
+
+                settings.fixKeybind = e.Key;
+                FixKeybindLabel.Text = e.Key.ToString();
+
+                // Register the key that was pressed by the user
+                uint keyId = (uint)KeyInterop.VirtualKeyFromKey(e.Key);
+                fixMouseHandler = new KeyHandler(keyId, HOTKEY_ID, this);
+                fixMouseHandler.RegisterHotKey();
+
+                MessageBox.Show("Fix mouse position keybind was modified!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            catch (ArgumentNullException ex)
+            catch (Exception ex)
             {
-                MessageBox.Show("The value passed was empty!", "Value error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (FormatException ex)
-            {
-                MessageBox.Show("The value passed was in the wrong format!", "Value error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-            catch (OverflowException ex)
-            {
-                MessageBox.Show("Value too high!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("The keybind could not be modified!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+        #endregion
+
+        /**************************************************************************/
+        #region Window events
 
         protected override void OnSourceInitialized(EventArgs e)
         {
@@ -162,17 +211,21 @@ namespace QuClick
             // Remove global hooks before closing the window
             _source.RemoveHook(HwndHook);
             _source = null;
-            
+
             // Unregister keybinds
             if (toggleHandler != null)
                 toggleHandler.UnregisterHotKey();
 
             if (startStopHandler != null)
                 startStopHandler.UnregisterHotKey();
-            
+
             base.OnClosed(e);
         }
 
+        #endregion
+
+        /**************************************************************************/
+        #region Helper methods
 
         private IntPtr HwndHook(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
@@ -205,11 +258,14 @@ namespace QuClick
             }
             return IntPtr.Zero;
         }
-
-        private void FixRecord_Click(object sender, RoutedEventArgs e)
+        
+        private Point GetMousePos()
         {
-
+            return this.PointToScreen(Mouse.GetPosition(this));
         }
+
+        #endregion
+
     }
 
 
