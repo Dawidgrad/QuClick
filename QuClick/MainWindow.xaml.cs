@@ -120,11 +120,13 @@ namespace QuClick
             }
         }
 
+        // Start recording the position of the cursor to save
         private void FixKeybind_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
+        // Detect when the frequency button is clicked 
         private void FrequencyButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -180,6 +182,7 @@ namespace QuClick
             switch (msg)
             {
                 case WM_HOTKEY:
+
                     switch (wParam.ToInt32())
                     {
                         case HOTKEY_ID:
@@ -201,6 +204,11 @@ namespace QuClick
                     break;
             }
             return IntPtr.Zero;
+        }
+
+        private void FixRecord_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 
