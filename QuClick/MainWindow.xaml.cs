@@ -23,8 +23,10 @@ namespace QuClick
         private KeyHandler fixMouseHandler;
 
         private HwndSource _source;
-        private const int HOTKEY_ID = 9000;
-        
+        private const int STARTSTOP_ID = 9000;
+        private const int TOGGLE_ID = 9001;
+        private const int FIXMOUSE_ID = 9002;
+
         // Thread to simulate mouse clicking in a loop
         private Thread workerThread = null;
         WorkerSingleton worker = WorkerSingleton.GetInstance();
@@ -130,7 +132,7 @@ namespace QuClick
 
                 // Register the key that was pressed by the user
                 uint keyId = (uint)KeyInterop.VirtualKeyFromKey(e.Key);
-                toggleHandler = new KeyHandler(keyId, HOTKEY_ID, this);
+                toggleHandler = new KeyHandler(keyId, TOGGLE_ID, this);
                 toggleHandler.RegisterHotKey();
 
                 MessageBox.Show("The toggle keybind was modified!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -156,7 +158,7 @@ namespace QuClick
 
                 // Register the key that was pressed by the user
                 uint keyId = (uint)KeyInterop.VirtualKeyFromKey(e.Key);
-                startStopHandler = new KeyHandler(keyId, HOTKEY_ID, this);
+                startStopHandler = new KeyHandler(keyId, STARTSTOP_ID, this);
                 startStopHandler.RegisterHotKey();
 
                 MessageBox.Show("The start / stop keybind was modified!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -181,7 +183,7 @@ namespace QuClick
 
                 // Register the key that was pressed by the user
                 uint keyId = (uint)KeyInterop.VirtualKeyFromKey(e.Key);
-                fixMouseHandler = new KeyHandler(keyId, HOTKEY_ID, this);
+                fixMouseHandler = new KeyHandler(keyId, FIXMOUSE_ID, this);
                 fixMouseHandler.RegisterHotKey();
 
                 MessageBox.Show("Fix mouse position keybind was modified!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -238,7 +240,7 @@ namespace QuClick
 
                     switch (wParam.ToInt32())
                     {
-                        case HOTKEY_ID:
+                        case STARTSTOP_ID:
                             // Decide wether to start the clicker or to stop it
                             if (workerThread == null)
                             {
@@ -252,6 +254,10 @@ namespace QuClick
                             }
 
                             handled = true;
+                            break;
+                        case FIXMOUSE_ID:
+                            settings.mouseFixed = !settings.mouseFixed;
+                            CursorPositionHandler.SaveCursorPosition();
                             break;
                     }
                     break;
